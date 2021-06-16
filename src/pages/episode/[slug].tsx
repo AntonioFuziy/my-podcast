@@ -63,6 +63,7 @@ export default function Episode({ episode }: EpisodeProps){
           width={700} 
           height={160}
           objectFit="cover"
+          className={styles.imagesRadius}
         />
         <Button 
           position="absolute"
