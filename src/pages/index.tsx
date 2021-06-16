@@ -1,5 +1,6 @@
-import { Flex, Text, Box, Icon, Heading, Table, Thead, Tr, Th, Checkbox, Tbody, Td, Button, calc } from '@chakra-ui/react'
+import { Flex, Text, Box, Icon, Heading, Table, Thead, Tr, Th, Tbody, Td, Button } from '@chakra-ui/react'
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { GetStaticProps } from 'next';
 import { FaPlay } from "react-icons/fa";
@@ -15,7 +16,6 @@ type Episode = {
   title: string;
   members: string;
   thumbnail: string;
-  descritpion: string;
   duration: string;
   durationAsString: string;
   url: string;
@@ -28,8 +28,6 @@ type HomeProps = {
 }
 
 export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
-  // const [] = useState();
-
   return (
     <Flex 
       color="white" 
@@ -39,7 +37,7 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
       style={{height: `calc(100vh - 6.5rem)`}}
     >
       <Flex direction="column">
-        <Heading fontSize="25" ml="8">Last Updates</Heading>
+        <Heading fontSize="25" ml="8" mb="8">Last Updates</Heading>
         <Flex>
           {latestEpisodes.map(episode => {
             return (
@@ -67,7 +65,11 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
                   justifyContent="space-around" 
                   ml="10"
                 >
-                  <Text fontWeight="bold">{episode.title}</Text>
+                  <Link 
+                    href={`/episode/${episode.id}`}
+                  >
+                    {episode.title}
+                  </Link>
                   <Text fontSize="14" color="gray.300" mt="4">{episode.members}</Text>
                   <Flex justify="space-between" mt="4">
                     <Text color="gray.300">{episode.publishedAt}</Text>
@@ -78,6 +80,7 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
                       fontSize="sm" 
                       colorScheme="pink" 
                       leftIcon={<Icon as={FaPlay} fontSize="15"/>}
+                      cursor="pointer"
                     >
                       Play
                     </Button>
@@ -88,7 +91,8 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
           })}
         </Flex>
       </Flex>
-      <Flex mt="10">
+      <Flex mt="10" direction="column">
+        <Heading fontSize="25" ml="8" mb="8">All Podcasts</Heading>
         <Table colorScheme="whiteAlpha">
             <Thead>
               <Tr>
@@ -115,7 +119,11 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
                       />
                     </Td>
                     <Td>
-                      <Text fontWeight="bold" fontSize="16">{episode.title}</Text>
+                      <Link 
+                        href={`/episode/${episode.id}`}
+                      >
+                        {episode.title}
+                      </Link>
                     </Td>
                     <Td fontSize="15">{episode.members}</Td>
                     <Td fontSize="15">{episode.publishedAt}</Td>
@@ -127,6 +135,7 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
                         fontSize="sm" 
                         colorScheme="pink" 
                         leftIcon={<Icon as={FaPlay} fontSize="15"/>}
+                        cursor="pointer"
                       >
                         Play
                       </Button>
