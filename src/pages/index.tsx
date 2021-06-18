@@ -11,12 +11,15 @@ import ptBR from 'date-fns/locale/pt-BR';
 import { api } from '../services/api';
 import { ConvertDurationToTimeString } from '../utils/convertDurationToTimeString';
 
+import { useContext } from 'react';
+import { PlayerContext } from '../contexts/PlayerContext';
+
 type Episode = {
   id: string;
   title: string;
   members: string;
   thumbnail: string;
-  duration: string;
+  duration: number;
   durationAsString: string;
   url: string;
   publishedAt: string;
@@ -28,6 +31,8 @@ type HomeProps = {
 }
 
 export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
+  const { play } = useContext(PlayerContext);
+  
   return (
     <Flex 
       color="white" 
@@ -81,6 +86,7 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
                       colorScheme="pink" 
                       leftIcon={<Icon as={FaPlay} fontSize="15"/>}
                       cursor="pointer"
+                      onClick={() => play(episode)}
                     >
                       Play
                     </Button>

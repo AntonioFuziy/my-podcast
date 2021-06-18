@@ -12,6 +12,7 @@ import { FaPlay } from "react-icons/fa";
 import { ConvertDurationToTimeString } from '../../utils/convertDurationToTimeString';
 
 import styles from "./slug.module.scss";
+import Link from 'next/link';
 
 type Episode = {
   id: string;
@@ -45,19 +46,21 @@ export default function Episode({ episode }: EpisodeProps){
       <Flex
         position="relative"
       >
-        <Button 
-          type="button"
-          position="absolute"
-          left="-5%"
-          top="50%"
-          borderRadius="8"
-          w="3rem"
-          h="3rem"
-          bg="pink.400"
-          zIndex="5"
-        >
-          <Icon as={FiChevronLeft} fontSize="30"/>
-        </Button>
+        <Link href="/">
+          <Button 
+            type="button"
+            position="absolute"
+            left="-5%"
+            top="50%"
+            borderRadius="8"
+            w="3rem"
+            h="3rem"
+            bg="pink.400"
+            zIndex="5"
+          >
+            <Icon as={FiChevronLeft} fontSize="30"/>
+          </Button>
+        </Link>
         <Image 
           src={episode.thumbnail} 
           width={700} 
