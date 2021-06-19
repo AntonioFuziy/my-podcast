@@ -1,5 +1,9 @@
 # My Podcast
 
+## Visit and try it
+
+![](https://my-podcast.vercel.app/)
+
 ## To try it
 
 First clone the github repository using the command below:
