@@ -32,7 +32,7 @@ type HomeProps = {
 }
 
 export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
-  const { playList } = useContext(PlayerContext);
+  const { playList, mobile } = useContext(PlayerContext);
 
   const episodeList = [...latestEpisodes, ...allEpisodes];
   
@@ -42,123 +42,185 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
       direction="column" 
       p="4rem" 
       overflowY="scroll"
-      style={{height: `calc(100vh - 6.5rem)`}}
+      style={ mobile ? {height: `calc(80vh - 6.5rem)`} : {height: `calc(100vh - 6.5rem)`}}
     >
       <Head>
         <title>Home | My Podcast</title>
       </Head>
-      <Flex direction="column">
-        <Heading fontSize="25" ml="8" mb="8">Last Updates</Heading>
-        <Flex>
-          {latestEpisodes.map((episode, index) => {
-            return (
-              <Box 
-                width="50%" 
-                ml="4"
-                h="150px" 
-                display="flex" 
-                flexDirection="row" 
-                bg="gray.800" 
-                borderRadius="8" 
-                p="5"
-                key={episode.id}
-              >
-                <Image 
-                  src={episode.thumbnail} 
-                  width={192} 
-                  height={192} 
-                  objectFit="contain"
-                  alt=""
-                />
-                <Box 
-                  display="flex" 
-                  flexDirection="column" 
-                  justifyContent="space-around" 
-                  ml="10"
-                >
-                  <Link 
-                    href={`/episode/${episode.id}`}
-                  >
-                    {episode.title}
-                  </Link>
-                  <Text fontSize="14" color="gray.300" mt="4">{episode.members}</Text>
-                  <Flex justify="space-between" mt="4">
-                    <Text color="gray.300">{episode.publishedAt}</Text>
-                    <Text color="gray.300">{episode.durationAsString}</Text>
-                    <Button 
-                      as="a" 
-                      size="sm" 
-                      fontSize="sm" 
-                      colorScheme="pink" 
-                      leftIcon={<Icon as={FaPlay} fontSize="15"/>}
-                      cursor="pointer"
-                      onClick={() => playList(episodeList, index)}
-                    >
-                      Play
-                    </Button>
-                  </Flex>
-                </Box>
-              </Box>
-            )
-          })}
-        </Flex>
-      </Flex>
-      <Flex mt="10" direction="column">
-        <Heading fontSize="25" ml="8" mb="8">All Podcasts</Heading>
-        <Table colorScheme="whiteAlpha">
-            <Thead>
-              <Tr>
-                <Th>
-                </Th>
-
-                <Th>Podcast</Th>
-                <Th>Members</Th>
-                <Th>Date</Th>
-                <Th>Duration</Th>
-                <Th w="8"></Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {allEpisodes.map((episode, index) => {
+      {mobile ? (
+        <>
+          <Flex direction="column">
+            <Heading fontSize="25" textAlign="center">Last Updates</Heading>
+            <Flex direction="column">
+              {episodeList.map((episode, index) => {
                 return (
-                  <Tr key={episode.id}>
-                    <Td px="6">
-                      <Image 
-                        src={episode.thumbnail} 
-                        width={100} 
-                        height={100} 
-                        objectFit="cover"
-                      />
-                    </Td>
-                    <Td>
+                  <Box 
+                    mt="10"
+                    maxW="100%"
+                    h="400px" 
+                    display="flex" 
+                    flexDirection="column" 
+                    bg="gray.800" 
+                    borderRadius="8" 
+                    p="5"
+                    key={episode.id}
+                  >
+                    <Image 
+                      src={episode.thumbnail} 
+                      width={400} 
+                      height={400} 
+                      objectFit="contain"
+                      alt=""
+                    />
+                    <Box 
+                      display="flex" 
+                      flexDirection="column" 
+                      justifyContent="space-around" 
+                    >
                       <Link 
                         href={`/episode/${episode.id}`}
                       >
                         {episode.title}
                       </Link>
-                    </Td>
-                    <Td fontSize="15">{episode.members}</Td>
-                    <Td fontSize="15">{episode.publishedAt}</Td>
-                    <Td fontSize="15">{episode.durationAsString}</Td>
-                    <Td>
-                      <Button 
-                        as="a" 
-                        size="sm" 
-                        fontSize="sm" 
-                        colorScheme="pink" 
-                        leftIcon={<Icon as={FaPlay} fontSize="15"/>}
-                        cursor="pointer"
-                        onClick={() => playList(episodeList, index + latestEpisodes.length)}
-                      >
-                        Play
-                      </Button>
-                    </Td>
-                  </Tr>
+                      <Text fontSize="14" color="gray.300" mt="4">{episode.members}</Text>
+                      <Flex justify="space-between" mt="4">
+                        <Text color="gray.300">{episode.publishedAt}</Text>
+                        <Text color="gray.300">{episode.durationAsString}</Text>
+                        <Button 
+                          as="a" 
+                          size="sm" 
+                          fontSize="sm" 
+                          colorScheme="pink" 
+                          leftIcon={<Icon as={FaPlay} fontSize="15"/>}
+                          cursor="pointer"
+                          onClick={() => playList(episodeList, index)}
+                        >
+                          Play
+                        </Button>
+                      </Flex>
+                    </Box>
+                  </Box>
                 )
               })}
-            </Tbody>
-          </Table>
-      </Flex>
+            </Flex>
+          </Flex>
+        </>
+      ) : (
+        <>
+          <Flex direction="column">
+            <Heading fontSize="25" ml="8" mb="8">Last Updates</Heading>
+            <Flex>
+              {latestEpisodes.map((episode, index) => {
+                return (
+                  <Box 
+                    width="50%" 
+                    ml="4"
+                    h="150px" 
+                    display="flex" 
+                    flexDirection="row" 
+                    bg="gray.800" 
+                    borderRadius="8" 
+                    p="5"
+                    key={episode.id}
+                  >
+                    <Image 
+                      src={episode.thumbnail} 
+                      width={192} 
+                      height={192} 
+                      objectFit="contain"
+                      alt=""
+                    />
+                    <Box 
+                      display="flex" 
+                      flexDirection="column" 
+                      justifyContent="space-around" 
+                      ml="10"
+                    >
+                      <Link 
+                        href={`/episode/${episode.id}`}
+                      >
+                        {episode.title}
+                      </Link>
+                      <Text fontSize="14" color="gray.300" mt="4">{episode.members}</Text>
+                      <Flex justify="space-between" mt="4">
+                        <Text color="gray.300">{episode.publishedAt}</Text>
+                        <Text color="gray.300">{episode.durationAsString}</Text>
+                        <Button 
+                          as="a" 
+                          size="sm" 
+                          fontSize="sm" 
+                          colorScheme="pink" 
+                          leftIcon={<Icon as={FaPlay} fontSize="15"/>}
+                          cursor="pointer"
+                          onClick={() => playList(episodeList, index)}
+                        >
+                          Play
+                        </Button>
+                      </Flex>
+                    </Box>
+                  </Box>
+                )
+              })}
+            </Flex>
+          </Flex>
+          <Flex mt="10" direction="column">
+            <Heading fontSize="25" ml="8" mb="8">All Podcasts</Heading>
+            <Table colorScheme="whiteAlpha">
+                <Thead>
+                  <Tr>
+                    <Th>
+                    </Th>
+
+                    <Th>Podcast</Th>
+                    <Th>Members</Th>
+                    <Th>Date</Th>
+                    <Th>Duration</Th>
+                    <Th w="8"></Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {allEpisodes.map((episode, index) => {
+                    return (
+                      <Tr key={episode.id}>
+                        <Td px="6">
+                          <Image 
+                            src={episode.thumbnail} 
+                            width={100} 
+                            height={100} 
+                            objectFit="cover"
+                          />
+                        </Td>
+                        <Td>
+                          <Link 
+                            href={`/episode/${episode.id}`}
+                          >
+                            {episode.title}
+                          </Link>
+                        </Td>
+                        <Td fontSize="15">{episode.members}</Td>
+                        <Td fontSize="15">{episode.publishedAt}</Td>
+                        <Td fontSize="15">{episode.durationAsString}</Td>
+                        <Td>
+                          <Button 
+                            as="a" 
+                            size="sm" 
+                            fontSize="sm" 
+                            colorScheme="pink" 
+                            leftIcon={<Icon as={FaPlay} fontSize="15"/>}
+                            cursor="pointer"
+                            onClick={() => playList(episodeList, index + latestEpisodes.length)}
+                          >
+                            Play
+                          </Button>
+                        </Td>
+                      </Tr>
+                    )
+                  })}
+                </Tbody>
+              </Table>
+          </Flex>
+        </>
+      )}
     </Flex>
   )
 }

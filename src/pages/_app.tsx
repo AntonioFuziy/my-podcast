@@ -6,7 +6,7 @@ import { Box, Flex } from '@chakra-ui/react'
 import { Header } from "../components/Header"
 import { Player } from "../components/Player"
 import { PlayerContext } from '../contexts/PlayerContext';
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 type Episode = {
   title: string;
@@ -22,6 +22,8 @@ function MyApp({ Component, pageProps } : AppProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLooping, setIsLooping] = useState(false);
   const [isShuffling, setIsShuffling] = useState(false);
+  const [mobile, setMobile] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(0);
 
   function play(episode: Episode){
     setEpisodeList([episode]);
@@ -76,6 +78,16 @@ function MyApp({ Component, pageProps } : AppProps) {
     setCurrentEpisodeIndex(0);
   }
 
+  useEffect(() => {
+    setWindowWidth(window.innerWidth);
+    if(windowWidth < 800){
+      setMobile(true);
+    } else{
+      setMobile(false);
+    }
+    console.log(windowWidth)
+  }, [windowWidth])
+
   return (
     <ChakraProvider theme={theme}>
       <PlayerContext.Provider value={{ 
@@ -94,15 +106,26 @@ function MyApp({ Component, pageProps } : AppProps) {
         toogleLoop,
         isShuffling,
         toogleShuffle,
-        clearPlayerState
+        clearPlayerState,
+        mobile
       }}>
-        <Flex direction="row" justifyContent="space-between" color="blackAlpha.800">
-          <Box flex="1">
-            <Header/>
-            <Component {...pageProps} />
-          </Box>
-          <Player/>
-        </Flex>
+        {mobile ? (
+          <Flex direction="column" justifyContent="space-between" color="blackAlpha.800">
+            <Box flex="1">
+              <Header/>
+              <Component {...pageProps} />
+            </Box>
+            <Player/>
+          </Flex>
+        ) : (
+          <Flex direction="row" justifyContent="space-between" color="blackAlpha.800">
+            <Box flex="1">
+              <Header/>
+              <Component {...pageProps} />
+            </Box>
+            <Player/>
+          </Flex>
+        )}
       </PlayerContext.Provider>
     </ChakraProvider>
   )

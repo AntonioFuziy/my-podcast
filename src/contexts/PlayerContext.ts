@@ -25,6 +25,7 @@ type PlayerContextData = {
   isShuffling: boolean;
   toogleShuffle: () => void;
   clearPlayerState: () => void;
+  mobile: boolean;
 }
 
 export const PlayerContext = createContext({} as PlayerContextData);

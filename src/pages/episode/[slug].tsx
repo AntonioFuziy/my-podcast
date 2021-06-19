@@ -36,11 +36,11 @@ type EpisodeProps = {
 
 export default function Episode({ episode }: EpisodeProps){
 
-  const { play } = useContext(PlayerContext);
+  const { play, mobile } = useContext(PlayerContext);
 
   return (
     <Flex 
-      maxWidth="45rem"
+      maxW="45rem"
       direction="column" 
       alignItems="center" 
       justifyContent="center" 
@@ -52,57 +52,114 @@ export default function Episode({ episode }: EpisodeProps){
       <Head>
         <title>{episode.title}</title>
       </Head>
-      <Flex
-        position="relative"
-      >
-        <Link href="/">
+      { mobile ? (
+        <Flex position="relative" mb="5">
+          <Link href="/">
+            <Button 
+              type="button"
+              position="absolute"
+              top="120%"
+              borderRadius="8"
+              w="3rem"
+              h="3rem"
+              bg="pink.400"
+              zIndex="5"
+            >
+              <Icon as={FiChevronLeft} fontSize="30"/>
+            </Button>
+          </Link>
+          <Image 
+            src={episode.thumbnail} 
+            width={900} 
+            height={500}
+            objectFit="cover"
+            className={styles.imagesRadius}
+          />
           <Button 
-            type="button"
             position="absolute"
-            left="-5%"
-            top="50%"
+            right="0"
+            top="120%"
+            type="button"
             borderRadius="8"
             w="3rem"
             h="3rem"
             bg="pink.400"
             zIndex="5"
+            onClick={() => play(episode)}
           >
-            <Icon as={FiChevronLeft} fontSize="30"/>
+            <Icon as={FaPlay} fontSize="20"/>
           </Button>
-        </Link>
-        <Image 
-          src={episode.thumbnail} 
-          width={700} 
-          height={160}
-          objectFit="cover"
-          className={styles.imagesRadius}
-        />
-        <Button 
-          position="absolute"
-          right="-5%"
-          top="50%"
-          type="button"
-          borderRadius="8"
-          w="3rem"
-          h="3rem"
-          bg="pink.400"
-          zIndex="5"
-          onClick={() => play(episode)}
+        </Flex>
+      ) : (
+        <Flex
+          position="relative"
         >
-          <Icon as={FaPlay} fontSize="20"/>
-        </Button>
-      </Flex>
+          <Link href="/">
+            <Button 
+              type="button"
+              position="absolute"
+              left="-5%"
+              top="50%"
+              borderRadius="8"
+              w="3rem"
+              h="3rem"
+              bg="pink.400"
+              zIndex="5"
+            >
+              <Icon as={FiChevronLeft} fontSize="30"/>
+            </Button>
+          </Link>
+          <Image 
+            src={episode.thumbnail} 
+            width={700} 
+            height={160}
+            objectFit="cover"
+            className={styles.imagesRadius}
+          />
+          <Button 
+            position="absolute"
+            right="-5%"
+            top="50%"
+            type="button"
+            borderRadius="8"
+            w="3rem"
+            h="3rem"
+            bg="pink.400"
+            zIndex="5"
+            onClick={() => play(episode)}
+          >
+            <Icon as={FaPlay} fontSize="20"/>
+          </Button>
+        </Flex>
+      )}
       
-      <Heading color="white" fontSize="28" mt="10">{episode.title}</Heading>
-      <Flex 
-        mt="8" 
-        justifyContent="space-between" 
-        w="100%"
-      >
-        <Text>{episode.members}</Text>
-        <Text>{episode.publishedAt}</Text>
-        <Text>{episode.durationAsString}</Text>
-      </Flex>
+      { mobile ? (
+        <>
+          <Heading color="white" fontSize="28" mt="20">{episode.title}</Heading>
+          <Flex 
+            mt="8" 
+            direction="column"
+            w="100%"
+          >
+            <Text mt="5">{episode.members}</Text>
+            <Text mt="3">{episode.publishedAt}</Text>
+            <Text mt="3">{episode.durationAsString}</Text>
+          </Flex>
+        </>
+      ) : (
+        <>
+          <Heading color="white" fontSize="28" mt="10">{episode.title}</Heading>
+          <Flex 
+            mt="8" 
+            justifyContent="space-between" 
+            w="100%"
+          >
+            <Text>{episode.members}</Text>
+            <Text>{episode.publishedAt}</Text>
+            <Text>{episode.durationAsString}</Text>
+          </Flex>
+        </>
+      )}
 
       <Box
         className={styles.description}
