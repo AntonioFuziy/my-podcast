@@ -1,6 +1,7 @@
 import { Flex, Text, Box, Icon, Heading, Table, Thead, Tr, Th, Tbody, Td, Button } from '@chakra-ui/react'
 import Image from 'next/image';
 import Link from 'next/link';
+import Head from 'next/head';
 
 import { GetStaticProps } from 'next';
 import { FaPlay } from "react-icons/fa";
@@ -31,7 +32,9 @@ type HomeProps = {
 }
 
 export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
-  const { play } = useContext(PlayerContext);
+  const { playList } = useContext(PlayerContext);
+
+  const episodeList = [...latestEpisodes, ...allEpisodes];
   
   return (
     <Flex 
@@ -41,10 +44,13 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
       overflowY="scroll"
       style={{height: `calc(100vh - 6.5rem)`}}
     >
+      <Head>
+        <title>Home | My Podcast</title>
+      </Head>
       <Flex direction="column">
         <Heading fontSize="25" ml="8" mb="8">Last Updates</Heading>
         <Flex>
-          {latestEpisodes.map(episode => {
+          {latestEpisodes.map((episode, index) => {
             return (
               <Box 
                 width="50%" 
@@ -86,7 +92,7 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
                       colorScheme="pink" 
                       leftIcon={<Icon as={FaPlay} fontSize="15"/>}
                       cursor="pointer"
-                      onClick={() => play(episode)}
+                      onClick={() => playList(episodeList, index)}
                     >
                       Play
                     </Button>
@@ -113,7 +119,7 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
               </Tr>
             </Thead>
             <Tbody>
-              {allEpisodes.map(episode => {
+              {allEpisodes.map((episode, index) => {
                 return (
                   <Tr key={episode.id}>
                     <Td px="6">
@@ -142,6 +148,7 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
                         colorScheme="pink" 
                         leftIcon={<Icon as={FaPlay} fontSize="15"/>}
                         cursor="pointer"
+                        onClick={() => playList(episodeList, index + latestEpisodes.length)}
                       >
                         Play
                       </Button>

@@ -1,6 +1,9 @@
 import { Flex, Text, Icon, Heading, Button, Box } from '@chakra-ui/react'
 import Image from 'next/image';
 import { GetStaticPaths, GetStaticProps } from 'next';
+import Head from 'next/head';
+import Link from 'next/link';
+
 import { api } from '../../services/api';
 
 import { format, parseISO } from 'date-fns';
@@ -10,9 +13,10 @@ import { FiChevronLeft } from "react-icons/fi";
 import { FaPlay } from "react-icons/fa";
 
 import { ConvertDurationToTimeString } from '../../utils/convertDurationToTimeString';
+import { PlayerContext } from '../../contexts/PlayerContext';
 
 import styles from "./slug.module.scss";
-import Link from 'next/link';
+import { useContext } from 'react';
 
 type Episode = {
   id: string;
@@ -20,7 +24,7 @@ type Episode = {
   members: string;
   thumbnail: string;
   description: string;
-  duration: string;
+  duration: number;
   durationAsString: string;
   url: string;
   publishedAt: string;
@@ -31,6 +35,8 @@ type EpisodeProps = {
 }
 
 export default function Episode({ episode }: EpisodeProps){
+
+  const { play } = useContext(PlayerContext);
 
   return (
     <Flex 
@@ -43,6 +49,9 @@ export default function Episode({ episode }: EpisodeProps){
       margin="0 auto"
       color="gray.100"
     >
+      <Head>
+        <title>{episode.title}</title>
+      </Head>
       <Flex
         position="relative"
       >
@@ -78,6 +87,7 @@ export default function Episode({ episode }: EpisodeProps){
           h="3rem"
           bg="pink.400"
           zIndex="5"
+          onClick={() => play(episode)}
         >
           <Icon as={FaPlay} fontSize="20"/>
         </Button>

@@ -1,5 +1,5 @@
 import { Flex, Heading, Icon, Text, Progress, Button, Box } from '@chakra-ui/react'
-import { FiHeadphones, FiRepeat, FiUpload } from 'react-icons/fi';
+import { FiHeadphones, FiRepeat, FiUpload, FiShuffle } from 'react-icons/fi';
 import { FaPlay, FaStepForward, FaStepBackward, FaPause } from 'react-icons/fa';
 import { useContext } from 'react';
 import Slider from 'rc-slider';
@@ -11,16 +11,28 @@ import { PlayerContext } from '../contexts/PlayerContext';
 import Image from 'next/image';
 import styles from "../pages/episode/slug.module.scss";
 import { useEffect, useRef } from 'react';
+import { ConvertDurationToTimeString } from '../utils/convertDurationToTimeString';
+import { useState } from 'react';
 
 export function Player(){
   const audioRef = useRef<HTMLAudioElement>(null);
+  const [progress, setProgress] = useState(0);
 
   const { 
     episodeList, 
     currentEpisodeIndex, 
     isPlaying,
     tooglePlay,
-    setPlayingState
+    setPlayingState,
+    playNext,
+    playPrevious,
+    hasNext,
+    hasPrevious,
+    isLooping,
+    toogleLoop,
+    isShuffling,
+    toogleShuffle,
+    clearPlayerState
   } = useContext(PlayerContext);
 
   useEffect(() =>  {
@@ -34,6 +46,27 @@ export function Player(){
       audioRef.current.pause();
     }
   }, [isPlaying])
+
+  function setUpProgressListener(){
+    audioRef.current.currentTime = 0;
+
+    audioRef.current.addEventListener('timeupdate', () => {
+      setProgress(Math.floor(audioRef.current.currentTime));
+    });
+  }
+
+  function handleSeek(amount: number){
+    audioRef.current.currentTime = amount;
+    setProgress(amount);
+  }
+
+  function handleEpisodeEnded(){
+    if(hasNext){
+      playNext();
+    } else{
+      clearPlayerState();
+    }
+  }
 
   const episode = episodeList[currentEpisodeIndex];
 
@@ -98,19 +131,22 @@ export function Player(){
 
       <Flex w="100%" alignItems="center" justifyContent="center" direction="column">
         <Flex justifyContent="space-between" alignItems="center" direction="row" mb="10">
-          <Text mr="3">00:00</Text>
+          <Text mr="3">{ConvertDurationToTimeString(progress)}</Text>
           {episode ? (
             <Box w={220} h={1} borderRadius="12">
               <Slider
                 trackStyle={{ backgroundColor: "#4A5568" }}
                 railStyle={{ backgroundColor: "#F687B3" }}
                 handleStyle={{ borderColor: "#D53F8C", borderWidth: 1 }}
+                max={episode.duration}
+                value={progress}
+                onChange={handleSeek}
               />
             </Box>
           ) : (
             <Progress value={80} colorScheme="gray" w={220} h={1} borderRadius="12" bg="pink.300"/>
           )}
-          <Text ml="3">10:59</Text>
+          <Text ml="3">{ConvertDurationToTimeString(episode?.duration ?? 0)}</Text>
         </Flex>
 
         { episode && (
@@ -118,16 +154,24 @@ export function Player(){
             src={episode.url}
             ref={audioRef}
             autoPlay
+            onEnded={handleEpisodeEnded}
+            loop={isLooping}
             onPlay={() => setPlayingState(true)}
             onPause={() => setPlayingState(false)}
+            onLoadedMetadata={setUpProgressListener}
           />
         )}
 
         <Flex alignItems="center" justifyContent="center">
-          <Button type="button" variant="ghost" disabled={!episode}>
-            <Icon as={FiUpload} fontSize="25"/>
+          <Button 
+            type="button" 
+            variant="ghost" 
+            disabled={!episode || episodeList.length === 1} 
+            onClick={toogleShuffle}
+          >
+            <Icon as={FiShuffle} fontSize="25" color={isShuffling && "#61dafb"}/>
           </Button>
-          <Button type="button" variant="ghost" disabled={!episode}>
+          <Button type="button" variant="ghost" disabled={!episode || !hasPrevious} onClick={playPrevious}>
             <Icon as={FaStepBackward} fontSize="25"/>
           </Button >
           <Button 
@@ -142,11 +186,16 @@ export function Player(){
               <Icon as={FaPlay} fontSize="30"/>
             )}
           </Button>
-          <Button type="button" variant="ghost" disabled={!episode}>
+          <Button type="button" variant="ghost" disabled={!episode || !hasNext} onClick={playNext}>
             <Icon as={FaStepForward} fontSize="25"/>
           </Button>
-          <Button type="button" variant="ghost" disabled={!episode}>
-            <Icon as={FiRepeat} fontSize="25"/>
+          <Button 
+            type="button" 
+            variant="ghost" 
+            disabled={!episode}
+            onClick={toogleLoop}
+          >
+            <Icon as={FiRepeat} fontSize="25" color={isLooping && "#61dafb"}/>
           </Button>
         </Flex>
       </Flex>

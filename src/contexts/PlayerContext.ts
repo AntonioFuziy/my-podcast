@@ -15,6 +15,16 @@ type PlayerContextData = {
   play: (episode: Episode) => void;
   tooglePlay: () => void;
   setPlayingState: (state: boolean) => void;
+  playList: (list: Episode[], index: number) => void;
+  playNext: () => void;
+  playPrevious: () => void;
+  hasPrevious: boolean;
+  hasNext: boolean;
+  isLooping: boolean;
+  toogleLoop: () => void;
+  isShuffling: boolean;
+  toogleShuffle: () => void;
+  clearPlayerState: () => void;
 }
 
 export const PlayerContext = createContext({} as PlayerContextData);
