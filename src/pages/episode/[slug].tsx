@@ -14,8 +14,6 @@ import { FaPlay } from "react-icons/fa";
 
 import { ConvertDurationToTimeString } from '../../utils/convertDurationToTimeString';
 import { PlayerContext } from '../../contexts/PlayerContext';
-
-import styles from "./slug.module.scss";
 import { useContext } from 'react';
 
 type Episode = {
@@ -73,7 +71,6 @@ export default function Episode({ episode }: EpisodeProps){
             width={900} 
             height={500}
             objectFit="cover"
-            className={styles.imagesRadius}
           />
           <Button 
             position="absolute"
@@ -114,7 +111,6 @@ export default function Episode({ episode }: EpisodeProps){
             width={700} 
             height={160}
             objectFit="cover"
-            className={styles.imagesRadius}
           />
           <Button 
             position="absolute"
@@ -162,7 +158,6 @@ export default function Episode({ episode }: EpisodeProps){
       )}
 
       <Box
-        className={styles.description}
         mt="10"
         dangerouslySetInnerHTML={{ __html: episode.description }}
       />

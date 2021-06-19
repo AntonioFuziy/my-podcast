@@ -9,7 +9,6 @@ import 'rc-slider/assets/index.css';
 import { PlayerContext } from '../contexts/PlayerContext';
 
 import Image from 'next/image';
-import styles from "../pages/episode/slug.module.scss";
 import { useEffect, useRef } from 'react';
 import { ConvertDurationToTimeString } from '../utils/convertDurationToTimeString';
 import { useState } from 'react';
@@ -107,7 +106,6 @@ export function Player(){
                   height={592} 
                   src={episode.thumbnail} 
                   objectFit="cover"
-                  className={styles.imagesRadius}
                 />
                 <Text 
                   mt="4" 
@@ -237,7 +235,6 @@ export function Player(){
                   height={592} 
                   src={episode.thumbnail} 
                   objectFit="cover"
-                  className={styles.imagesRadius}
                 />
                 <Text 
                   mt="4" 
