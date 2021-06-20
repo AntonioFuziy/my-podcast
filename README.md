@@ -2,7 +2,7 @@
 
 ## Visit and try it
 
-![](https://my-podcast.vercel.app/)
+![My Podcast](https://my-podcast.vercel.app/)
 
 ## To try it
 
