@@ -2,7 +2,7 @@
 
 ## Visit and try it
 
-![](https://img.shields.io/badge/-My-Podcast-informational?style=for-the-badge&logo=My-Podcast&my-podcastColor=white&color=000000)
+[My Podcast](https://my-podcast.vercel.app/)
 
 ## To try it
 
